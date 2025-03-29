@@ -160,5 +160,4 @@ resource "aws_route" "sg_priv_tgw_rtb_tgw" {
   destination_cidr_block = var.vpc_cidr[1]
   transit_gateway_id     = aws_ec2_transit_gateway.sg_tgw[0].id
   depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a]
-
 }
