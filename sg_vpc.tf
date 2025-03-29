@@ -88,7 +88,7 @@ resource "aws_subnet" "priv_subnets_sg_workloads" {
   }
 }
 
-# Create Private Route Table in the SG region
+# Create Private Route Table for Workloads in the SG region
 resource "aws_route_table" "priv_workloads_rtb" {
   count  = var.create_vpc ? 1 : 0
   vpc_id = aws_vpc.sg_vpc[0].id
@@ -142,4 +142,23 @@ resource "aws_route_table_association" "priv_tgw_rtb_assoc" {
   count          = var.create_vpc ? length(aws_subnet.priv_subnets_sg_tgw) : 0
   subnet_id      = aws_subnet.priv_subnets_sg_tgw[count.index].id
   route_table_id = aws_route_table.priv_tgw_rtb[0].id
+}
+
+# Add Tokyo's VPC CIDR in the Private Workloads and TGW Route Table
+
+resource "aws_route" "sg_priv_workloads_rtb_tgw" {
+  count                  = var.create_vpc ? 1 : 0
+  route_table_id         = aws_route_table.priv_workloads_rtb[0].id
+  destination_cidr_block = var.vpc_cidr[1]
+  transit_gateway_id     = aws_ec2_transit_gateway.sg_tgw[0].id
+  depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a]
+}
+
+resource "aws_route" "sg_priv_tgw_rtb_tgw" {
+  count                  = var.create_vpc ? 1 : 0
+  route_table_id         = aws_route_table.priv_tgw_rtb[0].id
+  destination_cidr_block = var.vpc_cidr[1]
+  transit_gateway_id     = aws_ec2_transit_gateway.sg_tgw[0].id
+  depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a]
+
 }
