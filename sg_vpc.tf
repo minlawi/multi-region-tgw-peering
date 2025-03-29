@@ -1,5 +1,5 @@
 # Create VPC in the SG region
-resource "aws_vpc" "vpc_sg" {
+resource "aws_vpc" "sg_vpc" {
   count                = var.create_vpc ? 1 : 0
   cidr_block           = var.vpc_cidr[0]
   enable_dns_hostnames = true
@@ -13,9 +13,9 @@ resource "aws_vpc" "vpc_sg" {
 # Create two (2) public subnets in the SG region
 resource "aws_subnet" "pub_subnets_sg" {
   count                   = var.create_vpc ? length(data.aws_availability_zones.az_sg.names) : 0
-  vpc_id                  = aws_vpc.vpc_sg[0].id
+  vpc_id                  = aws_vpc.sg_vpc[0].id
   availability_zone       = data.aws_availability_zones.az_sg.names[count.index]
-  cidr_block              = cidrsubnet(aws_vpc.vpc_sg[0].cidr_block, 8, count.index)
+  cidr_block              = cidrsubnet(aws_vpc.sg_vpc[0].cidr_block, 8, count.index)
   map_public_ip_on_launch = true
   tags = {
     Name      = "public-subnet-sg-${count.index}-${data.aws_availability_zones.az_sg.names[count.index]}"
@@ -26,7 +26,7 @@ resource "aws_subnet" "pub_subnets_sg" {
 # Create IGW in the SG region
 resource "aws_internet_gateway" "sg_igw" {
   count  = var.create_vpc ? 1 : 0
-  vpc_id = aws_vpc.vpc_sg[0].id
+  vpc_id = aws_vpc.sg_vpc[0].id
   tags = {
     Name      = "sg-igw"
     Terraform = "true"
@@ -36,7 +36,8 @@ resource "aws_internet_gateway" "sg_igw" {
 # Create Public Route Table in the SG region
 resource "aws_route_table" "pub_rtb_sg" {
   count  = var.create_vpc ? 1 : 0
-  vpc_id = aws_vpc.vpc_sg[0].id
+  vpc_id = aws_vpc.sg_vpc[0].id
+  # Create a route to the internet through the IGW
   route {
     gateway_id = aws_internet_gateway.sg_igw[0].id
     cidr_block = "0.0.0.0/0"
