@@ -4,7 +4,7 @@ resource "aws_ec2_transit_gateway_peering_attachment" "tgw_peering" {
   # peer_account_id          = <AWS_ACCOUNT_ID> # Optional, specify if the peer TGW is in a different AWS account
   peer_region             = "ap-northeast-1" # Japan region
   peer_transit_gateway_id = aws_ec2_transit_gateway.tgw_jp[0].id
-  transit_gateway_id      = aws_ec2_transit_gateway.sg_tgw[0].id
+  transit_gateway_id      = aws_ec2_transit_gateway.tgw_sg[0].id
   tags = {
     Name      = "tgw-peering-requestor"
     Terraform = "true"
