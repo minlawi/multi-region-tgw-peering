@@ -31,3 +31,25 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "tgwa_sg_vpc_a" {
     Terraform = "true"
   }
 }
+
+# Associate the TGW Attachment with the TGW Route Table in the SG region
+resource "aws_ec2_transit_gateway_route_table_association" "tgw_rtb_assoc" {
+  count                          = var.create_vpc ? 1 : 0
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_rtb_sg[0].id
+}
+
+# Propagate the TGW Attachment in the TGW Route Table in the SG region
+resource "aws_ec2_transit_gateway_route_table_propagation" "tgw_rtb_propagation" {
+  count                          = var.create_vpc ? 1 : 0
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_rtb_sg[0].id
+}
+
+# Add "0.0.0.0/0" CIDR in the TGW Route Table in the SG region
+resource "aws_ec2_transit_gateway_route" "tgw_route_sg_vpc" {
+  count                          = var.create_vpc ? 1 : 0
+  destination_cidr_block         = "0.0.0.0/0"
+  transit_gateway_attachment_id  = aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a.id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway_route_table.tgw_rtb_sg[0].id
+}
