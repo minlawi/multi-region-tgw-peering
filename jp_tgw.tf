@@ -1,8 +1,10 @@
 # Create a TGW in Japan region
 resource "aws_ec2_transit_gateway" "tgw_jp" {
-  provider    = aws.japan
-  count       = var.create_vpc ? 1 : 0
-  description = "Transit Gateway for JP region"
+  provider                        = aws.japan
+  count                           = var.create_vpc ? 1 : 0
+  default_route_table_association = "disable"
+  default_route_table_propagation = "disable"
+  description                     = "Transit Gateway for JP region"
   tags = {
     Name      = "tgw-jp"
     Terraform = "true"
