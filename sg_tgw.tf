@@ -5,7 +5,7 @@ resource "aws_ec2_transit_gateway" "tgw_sg" {
   default_route_table_propagation = "disable"
   description                     = "Transit Gateway for SG region"
   tags = {
-    Name      = "sg-tgw"
+    Name      = "tgw-sg"
     Terraform = "true"
   }
 }
