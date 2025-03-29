@@ -134,6 +134,7 @@ resource "aws_route" "route_tgw_vpc_jp_workloads_rtb" {
   route_table_id         = aws_route_table.priv_subnets_workloads_rtb_jp[0].id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_jp[0].id
+  depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_vpc_jp]
 }
 
 resource "aws_route" "route_tgw_vpc_jp_tgw_rtb" {
@@ -142,4 +143,5 @@ resource "aws_route" "route_tgw_vpc_jp_tgw_rtb" {
   route_table_id         = aws_route_table.priv_subnets_tgw_rtb_jp[0].id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = aws_ec2_transit_gateway.tgw_jp[0].id
+  depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_vpc_jp]
 }
