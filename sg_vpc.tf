@@ -28,7 +28,7 @@ resource "aws_internet_gateway" "igw_sg" {
   count  = var.create_vpc ? 1 : 0
   vpc_id = aws_vpc.vpc_sg[0].id
   tags = {
-    Name      = "sg-igw"
+    Name      = "igw-sg"
     Terraform = "true"
   }
 }
