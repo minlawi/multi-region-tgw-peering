@@ -149,7 +149,7 @@ resource "aws_route_table_association" "priv_tgw_rtb_assoc" {
 resource "aws_route" "sg_priv_workloads_rtb_tgw" {
   count                  = var.create_vpc ? 1 : 0
   route_table_id         = aws_route_table.priv_workloads_rtb[0].id
-  destination_cidr_block = var.vpc_cidr[1]
+  destination_cidr_block = aws_vpc.vpc_jp[0].cidr_block
   transit_gateway_id     = aws_ec2_transit_gateway.sg_tgw[0].id
   depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_sg_vpc_a]
 }
