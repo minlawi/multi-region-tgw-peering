@@ -16,7 +16,7 @@ provider "aws" {
 
 provider "aws" {
   # Configuration options
-  region = "ap-northeast-1"
+  region  = "ap-northeast-1"
   profile = var.profile
-  alias  = "tokyo"
+  alias   = "tokyo"
 }
