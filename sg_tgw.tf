@@ -24,7 +24,7 @@ resource "aws_ec2_transit_gateway_route_table" "tgw_rtb_sg" {
 # Create a TGW Attachment for the VPC in the SG region
 resource "aws_ec2_transit_gateway_vpc_attachment" "tgwa_sg_vpc_a" {
   vpc_id             = aws_vpc.sg_vpc[0].id
-  subnet_ids         = aws_subnet.pub_subnets_sg[*].id
+  subnet_ids         = tolist(aws_subnet.priv_subnets_sg_tgw[*].id)
   transit_gateway_id = aws_ec2_transit_gateway.sg_tgw[0].id
   tags = {
     Name      = "sg-tgw-attachment"
