@@ -128,7 +128,7 @@ resource "aws_route_table_association" "priv_rtb_assoc_tgw_jp" {
 
 # Add "0.0.0.0/0" route to the private route tables of workloads and TGW in the JP region
 
-resource "aws_route" "route_tgw_vpc_jp_workloads_rtb" {
+resource "aws_route" "default_route_rtb_workloads_jp" {
   provider               = aws.japan
   count                  = var.create_vpc ? 1 : 0
   route_table_id         = aws_route_table.priv_subnets_workloads_rtb_jp[0].id
@@ -137,7 +137,7 @@ resource "aws_route" "route_tgw_vpc_jp_workloads_rtb" {
   depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_vpc_jp]
 }
 
-resource "aws_route" "route_tgw_vpc_jp_tgw_rtb" {
+resource "aws_route" "default_route_rtb_tgw_jp" {
   provider               = aws.japan
   count                  = var.create_vpc ? 1 : 0
   route_table_id         = aws_route_table.priv_subnets_tgw_rtb_jp[0].id
