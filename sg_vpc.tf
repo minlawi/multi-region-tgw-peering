@@ -146,7 +146,7 @@ resource "aws_route_table_association" "priv_rtb_assoc_tgw_sg" {
 
 # Add Tokyo's VPC CIDR in the Private Workloads and TGW Route Table
 
-resource "aws_route" "jp_route_rtb_workloads" {
+resource "aws_route" "jp_route_rtb_workloads_sg" {
   count                  = var.create_vpc ? 1 : 0
   route_table_id         = aws_route_table.priv_subnets_workloads_rtb_sg[0].id
   destination_cidr_block = aws_vpc.vpc_jp[0].cidr_block
@@ -154,7 +154,7 @@ resource "aws_route" "jp_route_rtb_workloads" {
   depends_on             = [aws_ec2_transit_gateway_vpc_attachment.tgwa_vpc_sg]
 }
 
-resource "aws_route" "jp_route_rtb_tgw" {
+resource "aws_route" "jp_route_rtb_tgw_sg" {
   count                  = var.create_vpc ? 1 : 0
   route_table_id         = aws_route_table.priv_subnets_tgw_rtb_sg[0].id
   destination_cidr_block = aws_vpc.vpc_jp[0].cidr_block
